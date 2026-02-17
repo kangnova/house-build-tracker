@@ -1,6 +1,7 @@
 import BudgetOverview from "@/components/BudgetOverview";
 import TransactionList from "@/components/TransactionList";
 import { Hammer } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -31,10 +32,10 @@ export default function Home() {
           <TransactionList />
         </section>
 
-        {/* Floating Action Button (Placeholder for next phase) */}
-        <button className="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-full shadow-lg transition-all active:scale-95">
+        {/* Floating Action Button */}
+        <Link href="/tambah" className="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-full shadow-lg transition-all active:scale-95 flex items-center justify-center">
           <Hammer className="w-6 h-6" />
-        </button>
+        </Link>
       </div>
     </main>
   );

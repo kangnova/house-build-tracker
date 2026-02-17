@@ -1,10 +1,11 @@
 import { Card, CardHeader } from "@/components/ui/Card";
 import { formatCurrency } from "@/lib/data";
-import { mockTransactions } from "@/lib/mockData";
+import { useApp } from "@/lib/context";
 import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
 
 export default function TransactionList() {
-    const transactions = [...mockTransactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const { transactions: allTransactions } = useApp();
+    const transactions = [...allTransactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return (
         <Card className="mt-6">

@@ -2,10 +2,12 @@
 
 import { Card, CardHeader } from "@/components/ui/Card";
 import { formatCurrency, getBudgetOverview } from "@/lib/data";
+import { useApp } from "@/lib/context";
 import { Wallet, TrendingDown, AlertCircle } from "lucide-react";
 
 export default function BudgetOverview() {
-    const { totalBudget, totalExpenses, remaining, breakdown } = getBudgetOverview();
+    const { budget, transactions } = useApp();
+    const { totalBudget, totalExpenses, remaining, breakdown } = getBudgetOverview(transactions, budget.total);
 
     const percentUsed = (totalExpenses / totalBudget) * 100;
 
