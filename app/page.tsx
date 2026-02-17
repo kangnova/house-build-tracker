@@ -1,0 +1,41 @@
+import BudgetOverview from "@/components/BudgetOverview";
+import TransactionList from "@/components/TransactionList";
+import { Hammer } from "lucide-react";
+
+export default function Home() {
+  return (
+    <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-4 font-sans pb-20">
+      <div className="max-w-md mx-auto space-y-6">
+        {/* Header */}
+        <header className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <div className="bg-emerald-500 p-2 rounded-lg text-white">
+              <Hammer className="w-5 h-5" />
+            </div>
+            <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              Bangun Rumah
+            </h1>
+          </div>
+          <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800" />
+        </header>
+
+        {/* Dashboard Modules */}
+        <BudgetOverview />
+
+        {/* Recent Activity */}
+        <section>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Aktivitas Terkini</h2>
+            <button className="text-sm text-emerald-600 font-medium hover:text-emerald-700">Lihat Semua</button>
+          </div>
+          <TransactionList />
+        </section>
+
+        {/* Floating Action Button (Placeholder for next phase) */}
+        <button className="fixed bottom-6 right-6 bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-full shadow-lg transition-all active:scale-95">
+          <Hammer className="w-6 h-6" />
+        </button>
+      </div>
+    </main>
+  );
+}
