@@ -40,6 +40,9 @@ export interface Transaction {
   category: 'MATERIAL' | 'LABOR' | 'OTHER'; // Kept for logic differentiation
   categoryId?: string; // Link to dynamic category
   description: string;
+  storeName?: string; // New: Audit
+  storeAddress?: string; // New: Audit
+  storePhone?: string; // New: Audit
 }
 
 export interface DailyLaborLog {

@@ -15,32 +15,34 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
         quantity: "",
         unit: "pcs",
         price: "",
+        storeName: "",
+        storeAddress: "",
+        storePhone: "",
     });
 
     useEffect(() => {
         if (initialData) {
-            // Parse description to extract fields if possible, or just allow editing total amount
-            // For MVP, we might just pre-fill what we can or rely on User re-entering specifics if we didn't store structured data.
-            // Since we only stored description string, we can't easily reverse engineer name/qty/unit without regex.
-            // Strategy: For edit, we might simply allow editing the description and amount directly, 
-            // OR we just clear it and ask user to re-input? 
-            // Better: Let's parse the description if it follows our format: "Beli {name} ({qty} {unit})"
-
+            // ... existing parsing logic ...
             const match = initialData.description.match(/Beli (.+) \((\d+) (.+)\)/);
             if (match) {
                 setFormData({
                     name: match[1],
                     quantity: match[2],
                     unit: match[3],
-                    price: (initialData.amount / Number(match[2])).toString()
+                    price: (initialData.amount / Number(match[2])).toString(),
+                    storeName: initialData.storeName || "",
+                    storeAddress: initialData.storeAddress || "",
+                    storePhone: initialData.storePhone || "",
                 });
             } else {
-                // Fallback for non-standard descriptions
                 setFormData({
                     name: initialData.description,
                     quantity: "1",
                     unit: "pcs",
-                    price: initialData.amount.toString()
+                    price: initialData.amount.toString(),
+                    storeName: initialData.storeName || "",
+                    storeAddress: initialData.storeAddress || "",
+                    storePhone: initialData.storePhone || "",
                 });
             }
         }
@@ -60,6 +62,9 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
             amount: total,
             category: 'MATERIAL',
             description: `Beli ${formData.name} (${formData.quantity} ${formData.unit})`,
+            storeName: formData.storeName,
+            storeAddress: formData.storeAddress,
+            storePhone: formData.storePhone,
         };
 
         if (initialData) {
@@ -72,7 +77,7 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
 
         setLoading(false);
         if (!initialData) {
-            setFormData({ name: "", quantity: "", unit: "pcs", price: "" });
+            setFormData({ name: "", quantity: "", unit: "pcs", price: "", storeName: "", storeAddress: "", storePhone: "" });
         }
         if (onSuccess) onSuccess();
     };
@@ -138,6 +143,42 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
                         value={formData.price}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     />
+                </div>
+
+                <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-4">
+                    <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Detail Toko (Untuk Audit)</h3>
+                    <div>
+                        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Nama Toko</label>
+                        <input
+                            type="text"
+                            className="block w-full px-3 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-emerald-500 outline-none"
+                            placeholder="Nama Toko Bangunan"
+                            value={formData.storeName}
+                            onChange={(e) => setFormData({ ...formData, storeName: e.target.value })}
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Alamat/Lokasi</label>
+                            <input
+                                type="text"
+                                className="block w-full px-3 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-emerald-500 outline-none"
+                                placeholder="Jl. Raya..."
+                                value={formData.storeAddress}
+                                onChange={(e) => setFormData({ ...formData, storeAddress: e.target.value })}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">No. Telepon</label>
+                            <input
+                                type="tel"
+                                className="block w-full px-3 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-emerald-500 outline-none"
+                                placeholder="08..."
+                                value={formData.storePhone}
+                                onChange={(e) => setFormData({ ...formData, storePhone: e.target.value })}
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 <button

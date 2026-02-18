@@ -29,6 +29,10 @@ export default function Home() {
             <LayoutGrid className="w-4 h-4" />
             Kategori
           </Link>
+          <Link href="/laporan" className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 bg-blue-50 px-3 py-1.5 rounded-lg">
+            <FileText className="w-4 h-4" />
+            Laporan
+          </Link>
           <Link href="/pekerja" className="text-sm font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg">
             <Users className="w-4 h-4" />
             Pekerja

@@ -55,7 +55,16 @@ const ReportView = forwardRef<HTMLDivElement, ReportViewProps>(({ title, period,
                                     <td className="px-4 py-2">
                                         {t.category === 'MATERIAL' ? 'Material' : t.category === 'LABOR' ? 'Upah Tukang' : 'Lain-lain'}
                                     </td>
-                                    <td className="px-4 py-2">{t.description}</td>
+                                    <td className="px-4 py-2">
+                                        <div>{t.description}</div>
+                                        {t.storeName && (
+                                            <div className="text-xs text-zinc-500 mt-1">
+                                                Toko: {t.storeName}
+                                                {t.storeAddress && ` • ${t.storeAddress}`}
+                                                {t.storePhone && ` • Telp: ${t.storePhone}`}
+                                            </div>
+                                        )}
+                                    </td>
                                     <td className="px-4 py-2 text-right font-medium">
                                         {formatCurrency(t.amount)}
                                     </td>
