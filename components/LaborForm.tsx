@@ -81,7 +81,7 @@ export default function LaborForm({ initialData, onSuccess }: { initialData?: Tr
                                 </div>
                                 <div>
                                     <p className="font-medium text-zinc-900 dark:text-zinc-100">{worker.name}</p>
-                                    <p className="text-xs text-zinc-500">{worker.role}</p>
+                                    <p className="text-xs text-zinc-500">{worker.role} • {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(worker.dailyWage)}</p>
                                 </div>
                             </div>
                             {selectedWorkers.includes(worker.id) && (

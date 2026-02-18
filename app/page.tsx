@@ -1,6 +1,6 @@
 import BudgetOverview from "@/components/BudgetOverview";
 import TransactionList from "@/components/TransactionList";
-import { Hammer } from "lucide-react";
+import { Hammer, User, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -17,8 +17,18 @@ export default function Home() {
               Bangun Rumah
             </h1>
           </div>
-          <div className="w-8 h-8 rounded-full bg-zinc-200 dark:bg-zinc-800" />
+          <div className="h-10 w-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center">
+            <User className="w-5 h-5 text-zinc-500" />
+            {/* Note: In real app, maybe User Profile avatar */}
+          </div>
         </header>
+
+        <div className="flex justify-end mb-4">
+          <Link href="/pekerja" className="text-sm font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg">
+            <Users className="w-4 h-4" />
+            Kelola Pekerja
+          </Link>
+        </div>
 
         {/* Dashboard Modules */}
         <BudgetOverview />

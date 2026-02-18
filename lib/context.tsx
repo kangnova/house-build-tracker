@@ -12,6 +12,9 @@ interface AppContextType {
     addTransaction: (transaction: Transaction) => void;
     deleteTransaction: (id: string) => void;
     updateTransaction: (transaction: Transaction) => void;
+    addLabor: (labor: Labor) => void;
+    deleteLabor: (id: string) => void;
+    updateLabor: (labor: Labor) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -53,8 +56,37 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setTransactions((prev) => prev.map((t) => (t.id === updatedT.id ? updatedT : t)));
     };
 
+    const addLabor = (l: Labor) => {
+        setLabor((prev) => [...prev, l]);
+    };
+
+    const deleteLabor = (id: string) => {
+        setLabor((prev) => prev.filter((l) => l.id !== id));
+    };
+
+    const updateLabor = (updatedL: Labor) => {
+        setLabor((prev) => prev.map((l) => (l.id === updatedL.id ? updatedL : l)));
+    };
+
+    // Load Labor from LocalStorage
+    useEffect(() => {
+        const savedLabor = localStorage.getItem("labor");
+        if (savedLabor) {
+            setLabor(JSON.parse(savedLabor));
+        } else {
+            setLabor(mockLabor);
+        }
+    }, []);
+
+    // Save Labor to LocalStorage
+    useEffect(() => {
+        if (isInitialized) {
+            localStorage.setItem("labor", JSON.stringify(labor));
+        }
+    }, [labor, isInitialized]);
+
     return (
-        <AppContext.Provider value={{ budget, transactions, materials, labor, addTransaction, deleteTransaction, updateTransaction }}>
+        <AppContext.Provider value={{ budget, transactions, materials, labor, addTransaction, deleteTransaction, updateTransaction, addLabor, deleteLabor, updateLabor }}>
             {children}
         </AppContext.Provider>
     );

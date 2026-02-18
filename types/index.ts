@@ -18,7 +18,7 @@ export interface Material {
 export interface Labor {
   id: string;
   name: string;
-  role: LaborRole;
+  role: 'TUKANG' | 'LADEN';
   dailyWage: number;
 }
 

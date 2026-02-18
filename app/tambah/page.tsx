@@ -1,3 +1,5 @@
+"use client";
+
 import { Suspense, useEffect, useState } from "react";
 import MaterialForm from "@/components/MaterialForm";
 import LaborForm from "@/components/LaborForm";
