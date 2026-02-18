@@ -36,7 +36,7 @@ export default function LaborForm({ initialData, onSuccess }: { initialData?: Tr
 
         const totalWage = selectedWorkers.reduce((sum, id) => {
             const worker = labor.find(w => w.id === id);
-            return sum + (worker ? worker.dailyWage : 0);
+            return sum + (worker ? worker.daily_wage : 0);
         }, 0);
 
         const transactionData: Transaction = {
@@ -81,7 +81,7 @@ export default function LaborForm({ initialData, onSuccess }: { initialData?: Tr
                                 </div>
                                 <div>
                                     <p className="font-medium text-zinc-900 dark:text-zinc-100">{worker.name}</p>
-                                    <p className="text-xs text-zinc-500">{worker.role} • {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(worker.dailyWage)}</p>
+                                    <p className="text-xs text-zinc-500">{worker.role} • {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(worker.daily_wage)}</p>
                                 </div>
                             </div>
                             {selectedWorkers.includes(worker.id) && (

@@ -3,11 +3,9 @@ import { Budget, DailyLaborLog, Labor, Material, Transaction } from "@/types";
 export const initialBudget: Budget = {
     total: 100000000,
     remaining: 100000000,
-    plans: {
-        material: 60000000,
-        labor: 30000000,
-        other: 10000000,
-    }
+    plan_material: 60000000,
+    plan_labor: 30000000,
+    plan_other: 10000000,
 };
 
 export const mockMaterials: Material[] = [
@@ -18,11 +16,11 @@ export const mockMaterials: Material[] = [
 ];
 
 export const mockLabor: Labor[] = [
-    { id: '1', name: 'Pak Tukang 1', role: 'TUKANG', dailyWage: 150000 },
-    { id: '2', name: 'Pak Tukang 2', role: 'TUKANG', dailyWage: 150000 },
-    { id: '3', name: 'Pak Tukang 3', role: 'TUKANG', dailyWage: 150000 },
-    { id: '4', name: 'Mas Laden 1', role: 'LADEN', dailyWage: 100000 },
-    { id: '5', name: 'Mas Laden 2', role: 'LADEN', dailyWage: 100000 },
+    { id: '1', name: 'Pak Tukang 1', role: 'TUKANG', daily_wage: 150000 },
+    { id: '2', name: 'Pak Tukang 2', role: 'TUKANG', daily_wage: 150000 },
+    { id: '3', name: 'Pak Tukang 3', role: 'TUKANG', daily_wage: 150000 },
+    { id: '4', name: 'Mas Laden 1', role: 'LADEN', daily_wage: 100000 },
+    { id: '5', name: 'Mas Laden 2', role: 'LADEN', daily_wage: 100000 },
 ];
 
 export const mockTransactions: Transaction[] = [

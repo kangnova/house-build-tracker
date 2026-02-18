@@ -13,7 +13,7 @@ export default function WorkerList() {
     const [formData, setFormData] = useState<Partial<Labor>>({
         name: "",
         role: "TUKANG",
-        dailyWage: 0,
+        daily_wage: 0,
     });
 
     const handleEdit = (worker: Labor) => {
@@ -29,7 +29,7 @@ export default function WorkerList() {
 
     const handleSave = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.name || !formData.dailyWage) return;
+        if (!formData.name || !formData.daily_wage) return;
 
         if (isEditing) {
             updateLabor({ ...formData, id: isEditing } as Labor);
@@ -39,15 +39,15 @@ export default function WorkerList() {
                 id: crypto.randomUUID(),
                 name: formData.name,
                 role: formData.role as "TUKANG" | "LADEN",
-                dailyWage: Number(formData.dailyWage),
+                daily_wage: Number(formData.daily_wage),
             });
         }
-        setFormData({ name: "", role: "TUKANG", dailyWage: 0 });
+        setFormData({ name: "", role: "TUKANG", daily_wage: 0 });
     };
 
     const handleCancel = () => {
         setIsEditing(null);
-        setFormData({ name: "", role: "TUKANG", dailyWage: 0 });
+        setFormData({ name: "", role: "TUKANG", daily_wage: 0 });
     };
 
     return (
@@ -84,8 +84,8 @@ export default function WorkerList() {
                                 type="number"
                                 required
                                 className="block w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-zinc-50 dark:bg-zinc-800"
-                                value={formData.dailyWage || ''}
-                                onChange={(e) => setFormData({ ...formData, dailyWage: Number(e.target.value) })}
+                                value={formData.daily_wage || ''}
+                                onChange={(e) => setFormData({ ...formData, daily_wage: Number(e.target.value) })}
                                 placeholder="150000"
                             />
                         </div>
@@ -124,7 +124,7 @@ export default function WorkerList() {
                             <div>
                                 <h4 className="font-medium text-zinc-900 dark:text-zinc-100">{worker.name}</h4>
                                 <p className="text-sm text-zinc-500">
-                                    {worker.role === 'TUKANG' ? 'Tukang' : 'Laden'} • {formatCurrency(worker.dailyWage)}/hari
+                                    {worker.role === 'TUKANG' ? 'Tukang' : 'Laden'} • {formatCurrency(worker.daily_wage)}/hari
                                 </p>
                             </div>
                             <div className="flex gap-2">

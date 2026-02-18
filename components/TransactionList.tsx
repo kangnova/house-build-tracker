@@ -17,8 +17,8 @@ export default function TransactionList() {
     };
 
     const getCategoryName = (t: any) => {
-        if (t.categoryId) {
-            const cat = categories.find(c => c.id === t.categoryId);
+        if (t.category_id) {
+            const cat = categories.find(c => c.id === t.category_id);
             return cat ? cat.name : 'Lain-lain';
         }
         return t.category === 'MATERIAL' ? 'Material' : t.category === 'LABOR' ? 'Upah Tukang' : 'Lain-lain';

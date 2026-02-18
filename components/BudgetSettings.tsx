@@ -12,11 +12,9 @@ export default function BudgetSettings() {
     const [formData, setFormData] = useState<Budget>({
         total: 0,
         remaining: 0,
-        plans: {
-            material: 0,
-            labor: 0,
-            other: 0,
-        }
+        plan_material: 0,
+        plan_labor: 0,
+        plan_other: 0,
     });
 
     useEffect(() => {
@@ -24,18 +22,13 @@ export default function BudgetSettings() {
     }, [budget]);
 
     const handleTotalChange = (value: number) => {
-        // When total changes, we might want to suggest distribution or just update total
-        // For simplicity, we just update total. User manually updates plans.
         setFormData(prev => ({ ...prev, total: value }));
     };
 
-    const handlePlanChange = (key: keyof Budget['plans'], value: number) => {
+    const handlePlanChange = (key: keyof Budget, value: number) => {
         setFormData(prev => ({
             ...prev,
-            plans: {
-                ...prev.plans,
-                [key]: value
-            }
+            [key]: value
         }));
     };
 
@@ -45,7 +38,7 @@ export default function BudgetSettings() {
         alert("Pengaturan anggaran berhasil disimpan!");
     };
 
-    const allocated = formData.plans.material + formData.plans.labor + formData.plans.other;
+    const allocated = formData.plan_material + formData.plan_labor + formData.plan_other;
     const unallocated = formData.total - allocated;
 
     return (
@@ -80,8 +73,8 @@ export default function BudgetSettings() {
                             <input
                                 type="number"
                                 className="block w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-zinc-50 dark:bg-zinc-800"
-                                value={formData.plans.material || ''}
-                                onChange={(e) => handlePlanChange('material', Number(e.target.value))}
+                                value={formData.plan_material || ''}
+                                onChange={(e) => handlePlanChange('plan_material', Number(e.target.value))}
                             />
                         </div>
                         <div>
@@ -89,8 +82,8 @@ export default function BudgetSettings() {
                             <input
                                 type="number"
                                 className="block w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-zinc-50 dark:bg-zinc-800"
-                                value={formData.plans.labor || ''}
-                                onChange={(e) => handlePlanChange('labor', Number(e.target.value))}
+                                value={formData.plan_labor || ''}
+                                onChange={(e) => handlePlanChange('plan_labor', Number(e.target.value))}
                             />
                         </div>
                         <div>
@@ -98,8 +91,8 @@ export default function BudgetSettings() {
                             <input
                                 type="number"
                                 className="block w-full px-3 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-zinc-50 dark:bg-zinc-800"
-                                value={formData.plans.other || ''}
-                                onChange={(e) => handlePlanChange('other', Number(e.target.value))}
+                                value={formData.plan_other || ''}
+                                onChange={(e) => handlePlanChange('plan_other', Number(e.target.value))}
                             />
                         </div>
                     </div>

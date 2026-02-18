@@ -57,11 +57,11 @@ const ReportView = forwardRef<HTMLDivElement, ReportViewProps>(({ title, period,
                                     </td>
                                     <td className="px-4 py-2">
                                         <div>{t.description}</div>
-                                        {t.storeName && (
+                                        {t.store_name && (
                                             <div className="text-xs text-zinc-500 mt-1">
-                                                Toko: {t.storeName}
-                                                {t.storeAddress && ` • ${t.storeAddress}`}
-                                                {t.storePhone && ` • Telp: ${t.storePhone}`}
+                                                Toko: {t.store_name}
+                                                {t.store_address && ` • ${t.store_address}`}
+                                                {t.store_phone && ` • Telp: ${t.store_phone}`}
                                             </div>
                                         )}
                                     </td>

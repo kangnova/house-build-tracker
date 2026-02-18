@@ -4,11 +4,9 @@ export type LaborRole = 'TUKANG' | 'LADEN';
 export interface Budget {
   total: number;
   remaining: number;
-  plans: {
-    material: number;
-    labor: number;
-    other: number;
-  };
+  plan_material: number;
+  plan_labor: number;
+  plan_other: number;
 }
 
 export interface Material {
@@ -38,16 +36,16 @@ export interface Transaction {
   date: string;
   amount: number;
   category: 'MATERIAL' | 'LABOR' | 'OTHER'; // Kept for logic differentiation
-  categoryId?: string; // Link to dynamic category
+  category_id?: string; // Changed to match DB column 'category_id'
   description: string;
-  storeName?: string; // New: Audit
-  storeAddress?: string; // New: Audit
-  storePhone?: string; // New: Audit
+  store_name?: string; // Changed to match DB column 'store_name'
+  store_address?: string; // Changed to match DB column 'store_address'
+  store_phone?: string; // Changed to match DB column 'store_phone'
 }
 
 export interface DailyLaborLog {
   id: string;
   date: string;
   laborId: string;
-  isPresent: boolean;
+  status: 'PRESENT' | 'ABSENT' | 'HALF_DAY';
 }

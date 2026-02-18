@@ -30,9 +30,9 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
                     quantity: match[2],
                     unit: match[3],
                     price: (initialData.amount / Number(match[2])).toString(),
-                    storeName: initialData.storeName || "",
-                    storeAddress: initialData.storeAddress || "",
-                    storePhone: initialData.storePhone || "",
+                    storeName: initialData.store_name || "",
+                    storeAddress: initialData.store_address || "",
+                    storePhone: initialData.store_phone || "",
                 });
             } else {
                 setFormData({
@@ -40,9 +40,9 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
                     quantity: "1",
                     unit: "pcs",
                     price: initialData.amount.toString(),
-                    storeName: initialData.storeName || "",
-                    storeAddress: initialData.storeAddress || "",
-                    storePhone: initialData.storePhone || "",
+                    storeName: initialData.store_name || "",
+                    storeAddress: initialData.store_address || "",
+                    storePhone: initialData.store_phone || "",
                 });
             }
         }
@@ -62,9 +62,9 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
             amount: total,
             category: 'MATERIAL',
             description: `Beli ${formData.name} (${formData.quantity} ${formData.unit})`,
-            storeName: formData.storeName,
-            storeAddress: formData.storeAddress,
-            storePhone: formData.storePhone,
+            store_name: formData.storeName,
+            store_address: formData.storeAddress,
+            store_phone: formData.storePhone,
         };
 
         if (initialData) {

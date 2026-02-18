@@ -34,7 +34,7 @@ export default function ReportPage() {
 
     const reportRef = useRef<HTMLDivElement>(null);
     const handlePrint = useReactToPrint({
-        content: () => reportRef.current,
+        contentRef: reportRef,
         documentTitle: `Laporan-${reportType}-${periodStr}`,
     });
 
@@ -65,8 +65,8 @@ export default function ReportPage() {
                                 <button
                                     onClick={() => setReportType('ALL')}
                                     className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${reportType === 'ALL'
-                                            ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
-                                            : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400'
+                                        ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
+                                        : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400'
                                         }`}
                                 >
                                     Semua Transaksi
@@ -74,8 +74,8 @@ export default function ReportPage() {
                                 <button
                                     onClick={() => setReportType('LABOR')}
                                     className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${reportType === 'LABOR'
-                                            ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
-                                            : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400'
+                                        ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
+                                        : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400'
                                         }`}
                                 >
                                     Hanya Upah Tukang
