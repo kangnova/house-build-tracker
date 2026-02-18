@@ -1,15 +1,15 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardHeader } from "./ui/Card";
-import { Loader2, Plus, Box } from "lucide-react";
+import { Loader2, Plus, Box, Calculator } from "lucide-react";
 import { useApp } from "@/lib/context";
 import { Transaction } from "@/types";
-import { useEffect } from "react";
 
 export default function MaterialForm({ initialData, onSuccess }: { initialData?: Transaction, onSuccess?: () => void }) {
     const { addTransaction, updateTransaction } = useApp();
     const [loading, setLoading] = useState(false);
+    const [showCalculator, setShowCalculator] = useState(false);
+    const [calculatorTotal, setCalculatorTotal] = useState("");
+
     const [formData, setFormData] = useState({
         name: "",
         quantity: "",
@@ -48,6 +48,18 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
         }
     }, [initialData]);
 
+    // Calculator Effect
+    useEffect(() => {
+        if (showCalculator && calculatorTotal && formData.quantity) {
+            const total = parseFloat(calculatorTotal);
+            const qty = parseFloat(formData.quantity);
+            if (!isNaN(total) && !isNaN(qty) && qty > 0) {
+                const pricePerUnit = Math.round(total / qty);
+                setFormData(prev => ({ ...prev, price: pricePerUnit.toString() }));
+            }
+        }
+    }, [calculatorTotal, formData.quantity, showCalculator]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -78,6 +90,8 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
         setLoading(false);
         if (!initialData) {
             setFormData({ name: "", quantity: "", unit: "pcs", price: "", storeName: "", storeAddress: "", storePhone: "" });
+            setCalculatorTotal("");
+            setShowCalculator(false);
         }
         if (onSuccess) onSuccess();
     };
@@ -133,16 +147,52 @@ export default function MaterialForm({ initialData, onSuccess }: { initialData?:
                     </div>
                 </div>
 
+                {/* Calculator Toggle */}
+                <div className="flex items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={() => setShowCalculator(!showCalculator)}
+                        className={`text-xs flex items-center gap-1 px-3 py-1.5 rounded-lg border transition-all ${showCalculator
+                                ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-900/30 dark:border-indigo-700 dark:text-indigo-300"
+                                : "bg-zinc-50 border-zinc-200 text-zinc-500 dark:bg-zinc-800 dark:border-zinc-700"
+                            }`}
+                    >
+                        <Calculator className="w-3.5 h-3.5" />
+                        {showCalculator ? "Sembunyikan Kalkulator" : "Hitung Harga Satuan dari Total"}
+                    </button>
+                </div>
+
+                {/* Calculator Field */}
+                {showCalculator && (
+                    <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-xl border border-indigo-100 dark:border-indigo-800 animate-in slide-in-from-top-2 fade-in duration-200">
+                        <label className="block text-sm font-medium text-indigo-900 dark:text-indigo-100 mb-1">
+                            Total Harga Borongan (Semua Item)
+                        </label>
+                        <input
+                            type="number"
+                            className="block w-full px-3 py-2 border border-indigo-200 dark:border-indigo-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-indigo-500 outline-none"
+                            placeholder="Contoh: 850000"
+                            value={calculatorTotal}
+                            onChange={(e) => setCalculatorTotal(e.target.value)}
+                        />
+                        <p className="text-xs text-indigo-600 dark:text-indigo-300 mt-2">
+                            *Harga Satuan akan otomatis dihitung: {calculatorTotal || '0'} / {formData.quantity || '1'} = <strong>{Math.round((parseFloat(calculatorTotal) || 0) / (parseFloat(formData.quantity) || 1)).toLocaleString()}</strong>
+                        </p>
+                    </div>
+                )}
+
                 <div>
                     <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Harga Satuan (Rp)</label>
                     <input
                         type="number"
                         required
-                        className="block w-full px-3 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-emerald-500 outline-none"
+                        readOnly={showCalculator}
+                        className={`block w-full px-3 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-emerald-500 outline-none ${showCalculator ? 'opacity-75 cursor-not-allowed' : ''}`}
                         placeholder="Contoh: 65000"
                         value={formData.price}
-                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                        onChange={(e) => !showCalculator && setFormData({ ...formData, price: e.target.value })}
                     />
+                    {showCalculator && <p className="text-xs text-zinc-500 mt-1">Dihitung otomatis dari kalkulator di atas.</p>}
                 </div>
 
                 <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-4">
