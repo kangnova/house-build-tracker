@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardHeader } from "@/components/ui/Card";
 import { formatCurrency } from "@/lib/data";
 import { useApp } from "@/lib/context";
