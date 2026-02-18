@@ -1,6 +1,6 @@
 import BudgetOverview from "@/components/BudgetOverview";
 import TransactionList from "@/components/TransactionList";
-import { Hammer, LayoutGrid, Settings, Users } from "lucide-react";
+import { FileText, Hammer, LayoutGrid, Settings, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
