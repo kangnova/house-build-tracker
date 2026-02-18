@@ -1,18 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardHeader } from "./ui/Card";
 import { Loader2, Plus, Receipt } from "lucide-react";
 import { useApp } from "@/lib/context";
 import { Transaction } from "@/types";
 
-export default function OtherForm() {
-    const { addTransaction } = useApp();
+export default function OtherForm({ initialData, onSuccess }: { initialData?: Transaction, onSuccess?: () => void }) {
+    const { addTransaction, updateTransaction } = useApp();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         description: "",
         amount: "",
     });
+
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                description: initialData.description,
+                amount: initialData.amount.toString()
+            });
+        }
+    }, [initialData]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -21,19 +30,25 @@ export default function OtherForm() {
         // Simulate API delay
         await new Promise((resolve) => setTimeout(resolve, 500));
 
-        const transaction: Transaction = {
-            id: crypto.randomUUID(),
-            date: new Date().toISOString().split('T')[0],
+        const transactionData: Transaction = {
+            id: initialData ? initialData.id : crypto.randomUUID(),
+            date: initialData ? initialData.date : new Date().toISOString().split('T')[0],
             amount: Number(formData.amount),
             category: 'OTHER',
             description: formData.description,
         };
 
-        addTransaction(transaction);
+        if (initialData) {
+            updateTransaction(transactionData);
+            alert("Data pengeluaran berhasil diperbarui!");
+        } else {
+            addTransaction(transactionData);
+            alert("Biaya lain-lain berhasil disimpan!");
+        }
 
         setLoading(false);
-        setFormData({ description: "", amount: "" });
-        alert("Biaya lain-lain berhasil disimpan!");
+        if (!initialData) setFormData({ description: "", amount: "" });
+        if (onSuccess) onSuccess();
     };
 
     return (

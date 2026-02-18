@@ -1,15 +1,24 @@
-"use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardHeader } from "./ui/Card";
 import { Loader2, UserCheck, Users } from "lucide-react";
 import { useApp } from "@/lib/context";
 import { Transaction } from "@/types";
 
-export default function LaborForm() {
-    const { labor, addTransaction } = useApp();
+export default function LaborForm({ initialData, onSuccess }: { initialData?: Transaction, onSuccess?: () => void }) {
+    const { labor, addTransaction, updateTransaction } = useApp();
     const [loading, setLoading] = useState(false);
     const [selectedWorkers, setSelectedWorkers] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (initialData) {
+            // For labor, reconstructing the selection is hard because we store "Upah Tukang (3 orang)"
+            // and the total amount. We don't store WHO was present in the transaction description.
+            // For MVP, if editing labor, maybe we just reset the selection? 
+            // Or ideally, we should store metadata in the transaction. 
+            // For now, let's just leave it empty and let user re-select, 
+            // accepting that "Editing" Labor means re-doing the attendance.
+        }
+    }, [initialData]);
 
     const handleToggleWorker = (id: string) => {
         setSelectedWorkers((prev) =>
@@ -30,20 +39,26 @@ export default function LaborForm() {
             return sum + (worker ? worker.dailyWage : 0);
         }, 0);
 
-        const transaction: Transaction = {
-            id: crypto.randomUUID(),
-            date: new Date().toISOString().split('T')[0],
+        const transactionData: Transaction = {
+            id: initialData ? initialData.id : crypto.randomUUID(),
+            date: initialData ? initialData.date : new Date().toISOString().split('T')[0],
             amount: totalWage,
             category: 'LABOR',
             description: `Upah Tukang (${selectedWorkers.length} orang)`,
         };
 
-        addTransaction(transaction);
+        if (initialData) {
+            updateTransaction(transactionData);
+            alert("Data presensi berhasil diperbarui!");
+        } else {
+            addTransaction(transactionData);
+            alert("Data presensi berhasil disimpan!");
+        }
 
         console.log("Submitted Presensi:", selectedWorkers);
         setLoading(false);
-        setSelectedWorkers([]);
-        alert("Data absen tukang berhasil disimpan!");
+        if (!initialData) setSelectedWorkers([]);
+        if (onSuccess) onSuccess();
     };
 
     return (

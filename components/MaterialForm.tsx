@@ -5,9 +5,10 @@ import { Card, CardHeader } from "./ui/Card";
 import { Loader2, Plus, Box } from "lucide-react";
 import { useApp } from "@/lib/context";
 import { Transaction } from "@/types";
+import { useEffect } from "react";
 
-export default function MaterialForm() {
-    const { addTransaction } = useApp();
+export default function MaterialForm({ initialData, onSuccess }: { initialData?: Transaction, onSuccess?: () => void }) {
+    const { addTransaction, updateTransaction } = useApp();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -15,6 +16,35 @@ export default function MaterialForm() {
         unit: "pcs",
         price: "",
     });
+
+    useEffect(() => {
+        if (initialData) {
+            // Parse description to extract fields if possible, or just allow editing total amount
+            // For MVP, we might just pre-fill what we can or rely on User re-entering specifics if we didn't store structured data.
+            // Since we only stored description string, we can't easily reverse engineer name/qty/unit without regex.
+            // Strategy: For edit, we might simply allow editing the description and amount directly, 
+            // OR we just clear it and ask user to re-input? 
+            // Better: Let's parse the description if it follows our format: "Beli {name} ({qty} {unit})"
+
+            const match = initialData.description.match(/Beli (.+) \((\d+) (.+)\)/);
+            if (match) {
+                setFormData({
+                    name: match[1],
+                    quantity: match[2],
+                    unit: match[3],
+                    price: (initialData.amount / Number(match[2])).toString()
+                });
+            } else {
+                // Fallback for non-standard descriptions
+                setFormData({
+                    name: initialData.description,
+                    quantity: "1",
+                    unit: "pcs",
+                    price: initialData.amount.toString()
+                });
+            }
+        }
+    }, [initialData]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,19 +54,27 @@ export default function MaterialForm() {
         await new Promise((resolve) => setTimeout(resolve, 500));
 
         const total = Number(formData.quantity) * Number(formData.price);
-        const transaction: Transaction = {
-            id: crypto.randomUUID(),
-            date: new Date().toISOString().split('T')[0],
+        const transactionData: Transaction = {
+            id: initialData ? initialData.id : crypto.randomUUID(),
+            date: initialData ? initialData.date : new Date().toISOString().split('T')[0],
             amount: total,
             category: 'MATERIAL',
             description: `Beli ${formData.name} (${formData.quantity} ${formData.unit})`,
         };
 
-        addTransaction(transaction);
+        if (initialData) {
+            updateTransaction(transactionData);
+            alert("Data material berhasil diperbarui!");
+        } else {
+            addTransaction(transactionData);
+            alert("Data material berhasil disimpan!");
+        }
 
         setLoading(false);
-        setFormData({ name: "", quantity: "", unit: "pcs", price: "" });
-        alert("Data material berhasil disimpan!");
+        if (!initialData) {
+            setFormData({ name: "", quantity: "", unit: "pcs", price: "" });
+        }
+        if (onSuccess) onSuccess();
     };
 
     return (

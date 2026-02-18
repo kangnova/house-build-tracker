@@ -4,6 +4,7 @@ import { Card, CardHeader } from "@/components/ui/Card";
 import { formatCurrency } from "@/lib/data";
 import { useApp } from "@/lib/context";
 import { ArrowDownLeft, Trash2, Edit2 } from "lucide-react";
+import Link from "next/link";
 
 export default function TransactionList() {
     const { transactions: allTransactions, deleteTransaction } = useApp();
@@ -43,6 +44,12 @@ export default function TransactionList() {
                                 >
                                     <Trash2 className="w-4 h-4" />
                                 </button>
+                                <Link
+                                    href={`/tambah?edit=${t.id}`}
+                                    className="p-1.5 text-zinc-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
+                                >
+                                    <Edit2 className="w-4 h-4" />
+                                </Link>
                             </div>
                         </div>
                     ))
