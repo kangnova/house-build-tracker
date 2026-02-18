@@ -10,6 +10,8 @@ interface AppContextType {
     materials: Material[];
     labor: Labor[];
     addTransaction: (transaction: Transaction) => void;
+    deleteTransaction: (id: string) => void;
+    updateTransaction: (transaction: Transaction) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -43,8 +45,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setTransactions((prev) => [t, ...prev]);
     };
 
+    const deleteTransaction = (id: string) => {
+        setTransactions((prev) => prev.filter((t) => t.id !== id));
+    };
+
+    const updateTransaction = (updatedT: Transaction) => {
+        setTransactions((prev) => prev.map((t) => (t.id === updatedT.id ? updatedT : t)));
+    };
+
     return (
-        <AppContext.Provider value={{ budget, transactions, materials, labor, addTransaction }}>
+        <AppContext.Provider value={{ budget, transactions, materials, labor, addTransaction, deleteTransaction, updateTransaction }}>
             {children}
         </AppContext.Provider>
     );

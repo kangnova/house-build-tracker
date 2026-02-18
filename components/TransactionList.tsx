@@ -3,11 +3,17 @@
 import { Card, CardHeader } from "@/components/ui/Card";
 import { formatCurrency } from "@/lib/data";
 import { useApp } from "@/lib/context";
-import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
+import { ArrowDownLeft, Trash2, Edit2 } from "lucide-react";
 
 export default function TransactionList() {
-    const { transactions: allTransactions } = useApp();
+    const { transactions: allTransactions, deleteTransaction } = useApp();
     const transactions = [...allTransactions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    const handleDelete = (id: string) => {
+        if (confirm("Yakin ingin menghapus transaksi ini?")) {
+            deleteTransaction(id);
+        }
+    };
 
     return (
         <Card className="mt-6">
@@ -27,9 +33,17 @@ export default function TransactionList() {
                                     <p className="text-xs text-zinc-500">{t.date} • {t.category}</p>
                                 </div>
                             </div>
-                            <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
-                                -{formatCurrency(t.amount)}
-                            </span>
+                            <div className="flex items-center gap-3">
+                                <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
+                                    -{formatCurrency(t.amount)}
+                                </span>
+                                <button
+                                    onClick={() => handleDelete(t.id)}
+                                    className="p-1.5 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
                         </div>
                     ))
                 )}
