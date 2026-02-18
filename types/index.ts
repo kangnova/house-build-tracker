@@ -4,6 +4,11 @@ export type LaborRole = 'TUKANG' | 'LADEN';
 export interface Budget {
   total: number;
   remaining: number;
+  plans: {
+    material: number;
+    labor: number;
+    other: number;
+  };
 }
 
 export interface Material {

@@ -1,8 +1,13 @@
 import { Budget, DailyLaborLog, Labor, Material, Transaction } from "@/types";
 
 export const initialBudget: Budget = {
-    total: 80000000,
-    remaining: 80000000,
+    total: 100000000,
+    remaining: 100000000,
+    plans: {
+        material: 60000000,
+        labor: 30000000,
+        other: 10000000,
+    }
 };
 
 export const mockMaterials: Material[] = [

@@ -18,6 +18,7 @@ interface AppContextType {
     categories: Category[];
     addCategory: (category: Category) => void;
     deleteCategory: (id: string) => void;
+    updateBudget: (budget: Budget) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -41,6 +42,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const savedTransactions = localStorage.getItem("transactions");
         const savedLabor = localStorage.getItem("labor");
         const savedCategories = localStorage.getItem("categories");
+        const savedBudget = localStorage.getItem("budget");
 
         if (savedTransactions) setTransactions(JSON.parse(savedTransactions));
         else setTransactions(mockTransactions);
@@ -49,6 +51,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         else setLabor(mockLabor);
 
         if (savedCategories) setCategories(JSON.parse(savedCategories));
+
+        if (savedBudget) setBudget(JSON.parse(savedBudget));
 
         setIsInitialized(true);
     }, []);
@@ -59,8 +63,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             localStorage.setItem("transactions", JSON.stringify(transactions));
             localStorage.setItem("labor", JSON.stringify(labor));
             localStorage.setItem("categories", JSON.stringify(categories));
+            localStorage.setItem("budget", JSON.stringify(budget));
         }
-    }, [transactions, labor, categories, isInitialized]);
+    }, [transactions, labor, categories, budget, isInitialized]);
 
     const addTransaction = (t: Transaction) => {
         setTransactions((prev) => [t, ...prev]);
@@ -94,12 +99,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setCategories((prev) => prev.filter((c) => c.id !== id));
     };
 
+    const updateBudget = (newBudget: Budget) => {
+        setBudget(newBudget);
+    };
+
     return (
         <AppContext.Provider value={{
             budget, transactions, materials, labor, categories,
             addTransaction, deleteTransaction, updateTransaction,
             addLabor, deleteLabor, updateLabor,
-            addCategory, deleteCategory
+            addCategory, deleteCategory,
+            updateBudget
         }}>
             {children}
         </AppContext.Provider>

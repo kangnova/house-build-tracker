@@ -1,6 +1,6 @@
 import BudgetOverview from "@/components/BudgetOverview";
 import TransactionList from "@/components/TransactionList";
-import { Hammer, LayoutGrid, User, Users } from "lucide-react";
+import { Hammer, LayoutGrid, Settings, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -17,9 +17,10 @@ export default function Home() {
               Bangun Rumah
             </h1>
           </div>
-          <div className="h-10 w-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center">
-            <User className="w-5 h-5 text-zinc-500" />
-            {/* Note: In real app, maybe User Profile avatar */}
+          <div className="flex items-center gap-2">
+            <Link href="/pengaturan" className="h-10 w-10 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center hover:bg-zinc-300 transition-colors">
+              <Settings className="w-5 h-5 text-zinc-600" />
+            </Link>
           </div>
         </header>
 
