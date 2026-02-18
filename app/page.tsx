@@ -1,6 +1,6 @@
 import BudgetOverview from "@/components/BudgetOverview";
 import TransactionList from "@/components/TransactionList";
-import { Hammer, User, Users } from "lucide-react";
+import { Hammer, LayoutGrid, User, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -23,10 +23,14 @@ export default function Home() {
           </div>
         </header>
 
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end gap-2 mb-4">
+          <Link href="/kategori" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 flex items-center gap-1 bg-zinc-100 px-3 py-1.5 rounded-lg">
+            <LayoutGrid className="w-4 h-4" />
+            Kategori
+          </Link>
           <Link href="/pekerja" className="text-sm font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1 bg-emerald-50 px-3 py-1.5 rounded-lg">
             <Users className="w-4 h-4" />
-            Kelola Pekerja
+            Pekerja
           </Link>
         </div>
 

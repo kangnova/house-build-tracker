@@ -22,11 +22,18 @@ export interface Labor {
   dailyWage: number;
 }
 
+export interface Category {
+  id: string;
+  name: string;
+  type: 'SYSTEM' | 'CUSTOM'; // SYSTEM categories (Material, Labor) cannot be deleted
+}
+
 export interface Transaction {
   id: string;
   date: string;
   amount: number;
-  category: 'MATERIAL' | 'LABOR' | 'OTHER';
+  category: 'MATERIAL' | 'LABOR' | 'OTHER'; // Kept for logic differentiation
+  categoryId?: string; // Link to dynamic category
   description: string;
 }
 

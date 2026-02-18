@@ -7,18 +7,20 @@ import { useApp } from "@/lib/context";
 import { Transaction } from "@/types";
 
 export default function OtherForm({ initialData, onSuccess }: { initialData?: Transaction, onSuccess?: () => void }) {
-    const { addTransaction, updateTransaction } = useApp();
+    const { addTransaction, updateTransaction, categories } = useApp();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         description: "",
         amount: "",
+        categoryId: "",
     });
 
     useEffect(() => {
         if (initialData) {
             setFormData({
                 description: initialData.description,
-                amount: initialData.amount.toString()
+                amount: initialData.amount.toString(),
+                categoryId: initialData.categoryId || ""
             });
         }
     }, [initialData]);
@@ -30,12 +32,16 @@ export default function OtherForm({ initialData, onSuccess }: { initialData?: Tr
         // Simulate API delay
         await new Promise((resolve) => setTimeout(resolve, 500));
 
+        // Find selected category name for fallback if needed, though we should prefer the ID logic
+        const category = categories.find(c => c.id === formData.categoryId);
+
         const transactionData: Transaction = {
             id: initialData ? initialData.id : crypto.randomUUID(),
             date: initialData ? initialData.date : new Date().toISOString().split('T')[0],
             amount: Number(formData.amount),
             category: 'OTHER',
-            description: formData.description,
+            categoryId: formData.categoryId,
+            description: formData.description, // Description might be just details now
         };
 
         if (initialData) {
@@ -47,16 +53,33 @@ export default function OtherForm({ initialData, onSuccess }: { initialData?: Tr
         }
 
         setLoading(false);
-        if (!initialData) setFormData({ description: "", amount: "" });
+        if (!initialData) setFormData({ description: "", amount: "", categoryId: "" });
         if (onSuccess) onSuccess();
     };
 
+    const customCategories = categories.filter(c => c.type === 'CUSTOM');
+
     return (
         <Card>
-            <CardHeader title="Biaya Lain-lain" description="Catat pengeluaran di luar material & tukang (Snack, Alat, dll)" />
+            <CardHeader title="Biaya Lain-lain" description="Catat pengeluaran operasional / umum" />
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Keterangan Pengeluaran</label>
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Kategori</label>
+                    <select
+                        required
+                        className="block w-full px-3 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-emerald-500 outline-none"
+                        value={formData.categoryId}
+                        onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                    >
+                        <option value="">Pilih Kategori...</option>
+                        {customCategories.map(c => (
+                            <option key={c.id} value={c.id}>{c.name}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Keterangan</label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <Receipt className="h-5 w-5 text-zinc-400" />
@@ -65,7 +88,7 @@ export default function OtherForm({ initialData, onSuccess }: { initialData?: Tr
                             type="text"
                             required
                             className="block w-full pl-10 pr-3 py-3 border border-zinc-300 dark:border-zinc-700 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
-                            placeholder="Contoh: Beli Gorengan, Sewa Molen"
+                            placeholder="Detail pengeluaran..."
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         />

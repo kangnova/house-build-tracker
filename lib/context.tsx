@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { Transaction, Budget, Material, Labor } from "@/types";
+import { Transaction, Budget, Material, Labor, Category } from "@/types";
 import { initialBudget, mockMaterials, mockLabor, mockTransactions } from "./mockData";
 
 interface AppContextType {
@@ -15,6 +15,9 @@ interface AppContextType {
     addLabor: (labor: Labor) => void;
     deleteLabor: (id: string) => void;
     updateLabor: (labor: Labor) => void;
+    categories: Category[];
+    addCategory: (category: Category) => void;
+    deleteCategory: (id: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -24,25 +27,40 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [materials, setMaterials] = useState<Material[]>(mockMaterials);
     const [labor, setLabor] = useState<Labor[]>(mockLabor);
+    const [categories, setCategories] = useState<Category[]>([
+        { id: 'cat-material', name: 'Material Bangunan', type: 'SYSTEM' },
+        { id: 'cat-labor', name: 'Upah Tukang', type: 'SYSTEM' },
+        { id: 'cat-snack', name: 'Konsumsi (Snack/Makan)', type: 'CUSTOM' },
+        { id: 'cat-tools', name: 'Sewa Alat', type: 'CUSTOM' },
+        { id: 'cat-other', name: 'Lain-lain', type: 'CUSTOM' },
+    ]);
     const [isInitialized, setIsInitialized] = useState(false);
 
-    // Load from LocalStorage on mount
+    // Load Data from LocalStorage on mount
     useEffect(() => {
         const savedTransactions = localStorage.getItem("transactions");
-        if (savedTransactions) {
-            setTransactions(JSON.parse(savedTransactions));
-        } else {
-            setTransactions(mockTransactions); // Start with mock data if empty
-        }
+        const savedLabor = localStorage.getItem("labor");
+        const savedCategories = localStorage.getItem("categories");
+
+        if (savedTransactions) setTransactions(JSON.parse(savedTransactions));
+        else setTransactions(mockTransactions);
+
+        if (savedLabor) setLabor(JSON.parse(savedLabor));
+        else setLabor(mockLabor);
+
+        if (savedCategories) setCategories(JSON.parse(savedCategories));
+
         setIsInitialized(true);
     }, []);
 
-    // Save to LocalStorage whenever transactions change
+    // Save Data to LocalStorage
     useEffect(() => {
         if (isInitialized) {
             localStorage.setItem("transactions", JSON.stringify(transactions));
+            localStorage.setItem("labor", JSON.stringify(labor));
+            localStorage.setItem("categories", JSON.stringify(categories));
         }
-    }, [transactions, isInitialized]);
+    }, [transactions, labor, categories, isInitialized]);
 
     const addTransaction = (t: Transaction) => {
         setTransactions((prev) => [t, ...prev]);
@@ -68,25 +86,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setLabor((prev) => prev.map((l) => (l.id === updatedL.id ? updatedL : l)));
     };
 
-    // Load Labor from LocalStorage
-    useEffect(() => {
-        const savedLabor = localStorage.getItem("labor");
-        if (savedLabor) {
-            setLabor(JSON.parse(savedLabor));
-        } else {
-            setLabor(mockLabor);
-        }
-    }, []);
+    const addCategory = (c: Category) => {
+        setCategories((prev) => [...prev, c]);
+    };
 
-    // Save Labor to LocalStorage
-    useEffect(() => {
-        if (isInitialized) {
-            localStorage.setItem("labor", JSON.stringify(labor));
-        }
-    }, [labor, isInitialized]);
+    const deleteCategory = (id: string) => {
+        setCategories((prev) => prev.filter((c) => c.id !== id));
+    };
 
     return (
-        <AppContext.Provider value={{ budget, transactions, materials, labor, addTransaction, deleteTransaction, updateTransaction, addLabor, deleteLabor, updateLabor }}>
+        <AppContext.Provider value={{
+            budget, transactions, materials, labor, categories,
+            addTransaction, deleteTransaction, updateTransaction,
+            addLabor, deleteLabor, updateLabor,
+            addCategory, deleteCategory
+        }}>
             {children}
         </AppContext.Provider>
     );
