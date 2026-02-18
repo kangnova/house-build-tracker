@@ -22,7 +22,7 @@ export interface Labor {
   id: string;
   name: string;
   role: 'TUKANG' | 'LADEN';
-  dailyWage: number;
+  daily_wage: number;
 }
 
 export interface Category {

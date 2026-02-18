@@ -20,7 +20,7 @@ export default function OtherForm({ initialData, onSuccess }: { initialData?: Tr
             setFormData({
                 description: initialData.description,
                 amount: initialData.amount.toString(),
-                categoryId: initialData.categoryId || ""
+                categoryId: initialData.category_id || ""
             });
         }
     }, [initialData]);
@@ -40,7 +40,7 @@ export default function OtherForm({ initialData, onSuccess }: { initialData?: Tr
             date: initialData ? initialData.date : new Date().toISOString().split('T')[0],
             amount: Number(formData.amount),
             category: 'OTHER',
-            categoryId: formData.categoryId,
+            category_id: formData.categoryId,
             description: formData.description, // Description might be just details now
         };
 
